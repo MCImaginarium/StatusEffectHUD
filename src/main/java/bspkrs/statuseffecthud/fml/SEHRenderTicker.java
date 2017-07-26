@@ -2,13 +2,14 @@ package bspkrs.statuseffecthud.fml;
 
 import java.util.List;
 
+import bspkrs.statuseffecthud.StatusEffectHUD;
+import bspkrs.util.ReflectionHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.InventoryEffectRenderer;
-import bspkrs.statuseffecthud.StatusEffectHUD;
-import bspkrs.util.ReflectionHelper;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
@@ -19,12 +20,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class SEHRenderTicker
 {
-    private Minecraft      mc;
+    private Minecraft mcClient;
     private static boolean isRegistered = false;
 
     public SEHRenderTicker()
     {
-        mc = Minecraft.getMinecraft();
+        mcClient = FMLClientHandler.instance().getClient();
         isRegistered = true;
     }
 
@@ -35,11 +36,11 @@ public class SEHRenderTicker
         if (event.phase.equals(Phase.START))
         {
             if (StatusEffectHUD.disableInventoryEffectList)
-                if (mc.currentScreen != null && mc.currentScreen instanceof InventoryEffectRenderer)
+                if (mcClient.currentScreen != null && mcClient.currentScreen instanceof InventoryEffectRenderer)
                 {
                     try
                     {
-                        InventoryEffectRenderer ier = ((InventoryEffectRenderer) mc.currentScreen);
+                        InventoryEffectRenderer ier = ((InventoryEffectRenderer)mcClient.currentScreen);
                         if (ReflectionHelper.getBooleanValue(InventoryEffectRenderer.class, "field_147045_u", "hasActivePotionEffects", ier, false))
                         {
                             ReflectionHelper.setBooleanValue(InventoryEffectRenderer.class, "field_147045_u", "hasActivePotionEffects", ier, false);
@@ -49,11 +50,11 @@ public class SEHRenderTicker
 
                         List buttonList = ReflectionHelper.getListObject(GuiScreen.class, "field_146292_n", "buttonList", ier);
                         for (Object o : buttonList)
-                            if (o instanceof GuiButton && ((GuiButton) o).id == 101)
-                                ((GuiButton) o).xPosition = ReflectionHelper.getIntValue(GuiContainer.class, "field_147003_i", "guiLeft", ier,
+                            if (o instanceof GuiButton && ((GuiButton)o).id == 101)
+                                ((GuiButton)o).x = ReflectionHelper.getIntValue(GuiContainer.class, "field_147003_i", "guiLeft", ier,
                                         (ier.width - ReflectionHelper.getIntValue(GuiContainer.class, "field_146999_f", "xSize", ier, 176)) / 2);
-                            else if (o instanceof GuiButton && ((GuiButton) o).id == 102)
-                                ((GuiButton) o).xPosition = ReflectionHelper.getIntValue(GuiContainer.class, "field_147003_i", "guiLeft", ier,
+                            else if (o instanceof GuiButton && ((GuiButton)o).id == 102)
+                                ((GuiButton)o).x = ReflectionHelper.getIntValue(GuiContainer.class, "field_147003_i", "guiLeft", ier,
                                         (ier.width - ReflectionHelper.getIntValue(GuiContainer.class, "field_146999_f", "xSize", ier, 176)) / 2) +
                                         ReflectionHelper.getIntValue(GuiContainer.class, "field_146999_f", "xSize", ier, 176) - 20;
                     }
@@ -64,7 +65,7 @@ public class SEHRenderTicker
             return;
         }
 
-        if (!StatusEffectHUD.onTickInGame(mc))
+        if (!StatusEffectHUD.onTickInGame(mcClient))
         {
             FMLCommonHandler.instance().bus().unregister(this);
             isRegistered = false;

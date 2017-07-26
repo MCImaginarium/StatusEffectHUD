@@ -73,7 +73,6 @@ public class StatusEffectHUD
         }
 
         Reference.config = new Configuration(file);
-
         syncConfig();
     }
 
@@ -142,8 +141,8 @@ public class StatusEffectHUD
 
     public static boolean onTickInGame(Minecraft mc)
     {
-        if (enabled && (mc.inGameHasFocus || mc.currentScreen == null || (mc.currentScreen instanceof GuiChat && showInChat)) &&
-                !mc.gameSettings.showDebugInfo)
+        if (enabled && (mc.inGameHasFocus || (mc.currentScreen == null) || ((mc.currentScreen instanceof GuiChat) && showInChat))
+                && !mc.gameSettings.showDebugInfo)
         {
             GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
             scaledResolution = new ScaledResolution(mc);
@@ -157,7 +156,7 @@ public class StatusEffectHUD
     private static int getX(int width)
     {
         if (alignMode.equalsIgnoreCase("topcenter") || alignMode.equalsIgnoreCase("middlecenter") || alignMode.equalsIgnoreCase("bottomcenter"))
-            return scaledResolution.getScaledWidth() / 2 - width / 2 + (applyXOffsetToCenter ? xOffset : 0);
+            return ((scaledResolution.getScaledWidth() / 2) - (width / 2)) + (applyXOffsetToCenter ? xOffset : 0);
         else if (alignMode.equalsIgnoreCase("topright") || alignMode.equalsIgnoreCase("middleright") || alignMode.equalsIgnoreCase("bottomright"))
             return scaledResolution.getScaledWidth() - width - xOffset;
         else
@@ -167,7 +166,7 @@ public class StatusEffectHUD
     private static int getY(int rowCount, int height)
     {
         if (alignMode.equalsIgnoreCase("middleleft") || alignMode.equalsIgnoreCase("middlecenter") || alignMode.equalsIgnoreCase("middleright"))
-            return (scaledResolution.getScaledHeight() / 2) - ((rowCount * height) / 2) + (applyYOffsetToMiddle ? yOffset : 0);
+            return ((scaledResolution.getScaledHeight() / 2) - ((rowCount * height) / 2)) + (applyYOffsetToMiddle ? yOffset : 0);
         else if (alignMode.equalsIgnoreCase("bottomleft") || alignMode.equalsIgnoreCase("bottomright"))
             return scaledResolution.getScaledHeight() - (rowCount * height) - yOffset;
         else if (alignMode.equalsIgnoreCase("bottomcenter"))
