@@ -8,14 +8,14 @@
     "mcversion": "${minecraft_version}",
     "url": "http://www.minecraftforum.net/topic/1114612-/",
     "updateUrl": "",
-    "authorList": [ "bspkrs", "TealNerd", "ZenCoder" ],
+    "authorList": ["bspkrs", "TealNerd", "ZenCoder"],
     "credits": "",
     "logoFile": "",
-    "screenshots": [  ],
+    "screenshots": [],
     "parent": "",
-    "requiredMods": [ "bspkrscore@[${bscore_version},)" ],
-    "dependencies": [ "bspkrscore@[${bscore_version},)" ],
-    "dependants": [  ],
+    "requiredMods": ["bspkrscore@[${bscore_version},)"],
+    "dependencies": ["bspkrscore@[${bscore_version},)"],
+    "dependants": [],
     "useDependencyInformation": "true"
   }]
 }
